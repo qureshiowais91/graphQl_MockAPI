@@ -1,13 +1,12 @@
-import mongoose from "mongoose";
-const schema = mongoose.Schema;
+import { Schema, model } from "mongoose";
 
+const schema = Schema;
 
-
-const patient  =  new schema({
-    name:String,
-    mobile:String,
-    password:String
+const patientSchema = new schema({
+    name: String,
+    mobile: String,
+    password: String
 })
 
-
-module.exports =mongoose.model('Patient',patient);
+const patient = model('Patient', patientSchema);
+export default patient 

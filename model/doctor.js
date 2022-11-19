@@ -3,11 +3,12 @@ const schema = mongoose.Schema;
 
 
 
-const doctor  =  new schema({
+const doctorSchema  =  new schema({
     name:String,
     mobile:String,
     password:String
 })
 
+const doctor = mongoose.model('doctor',doctorSchema);
 
-module.exports =mongoose.model('Patient',doctor);
+export default doctor;

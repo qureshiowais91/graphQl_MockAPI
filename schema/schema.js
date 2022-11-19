@@ -1,5 +1,8 @@
-const graphql = require("graphql");
-const _ = require("lodash");
+// const graphql = require("graphql");
+import graphql from "graphql"
+import patient from "../model/patient.js"
+import doctor from "../model/doctor.js"
+
 const {
     GraphQLObjectType,
     GraphQLString,
@@ -48,6 +51,27 @@ const DoctorType = new GraphQLObjectType({
     })
 })
 
+const Mutation = new GraphQLObjectType({
+    name: 'mutation',
+    fields: {
+        addPatient: {
+            type: PatientType,
+            args: {
+                mobile: { type: GraphQLString },
+                password: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                let newpatient = new patient({
+                    mobile: args.mobile,
+                    password: args.password
+                })
+                return newpatient.save();
+            }
+        }
+
+    }
+})
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -80,7 +104,9 @@ const RootQuery = new GraphQLObjectType({
     }
 })
 
-
-module.exports = new GraphQLSchema({
-    query: RootQuery
+const schema = new GraphQLSchema({
+    query: RootQuery,
+    mutation: Mutation
 })
+
+export default schema;
