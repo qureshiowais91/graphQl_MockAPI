@@ -58,17 +58,32 @@ const Mutation = new GraphQLObjectType({
             type: PatientType,
             args: {
                 mobile: { type: GraphQLString },
-                password: { type: GraphQLString }
+                password: { type: GraphQLString },
+                doctorId:{type:GraphQLID}
             },
             resolve(parent, args) {
                 let newpatient = new patient({
                     mobile: args.mobile,
-                    password: args.password
+                    password: args.password,
+                    doctorId:args.doctorId
                 })
                 return newpatient.save();
             }
+        },
+        addDoctor: {
+            type: DoctorType,
+            args: {
+                mobile: { type: GraphQLString },
+                password: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                let newDoctor = new doctor({
+                    mobile: args.mobile,
+                    password: args.password
+                })
+                return newDoctor.save();
+            }
         }
-
     }
 })
 
