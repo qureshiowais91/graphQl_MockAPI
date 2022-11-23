@@ -22,14 +22,14 @@ const PatientType = new GraphQLObjectType({
             type: new GraphQLList(PatientType),
             resolve(parent, args) {
                 console.log(parent)
-                return _.filter(doctor, { patient_id: parent.id })
+                return patient.find({doctor:parent.id})
             }
         },
     })
 })
 
 const DoctorType = new GraphQLObjectType({
-    name: "Docctor",
+    name: "Doctor",
     fields: () => ({
         id: { type: GraphQLID },
         mobile: { type: GraphQLString },
@@ -38,14 +38,16 @@ const DoctorType = new GraphQLObjectType({
             type: new GraphQLList(PatientType),
             resolve(parent, args) {
                 console.log(parent)
-                return _.filter(patients, { doctorId: parent.id })
+                // return _.filter(patients, { doctorId: parent.id })
+                return doctor.find({patient:parent.id})
+
             }
         },
         patient: {
             type: PatientType,
             resolve(parent, args) {
                 console.log(parent)
-                return _.find(patients, { id: parent.patient_id })
+                return patient.findById(parent.patient_id)
             }
         }
     })
@@ -94,26 +96,28 @@ const RootQuery = new GraphQLObjectType({
             type: PatientType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return _.find(patients, { id: args.id })
+                // return _.find(patients, { id: args.id })
+                return patient.findById(args.id);
             }
         },
         doctor: {
             type: DoctorType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return _.find(doctor, { id: args.id })
+                // return _.find(doctor, { id: args.id })
+                return doctor.findById(args.id)
             }
         },
         patients: {
             type: new GraphQLList(PatientType),
             resolve(parent, args) {
-                return patients
+                return patient.find({})
             }
         },
         doctors: {
             type: new GraphQLList(DoctorType),
             resolve(parent, args) {
-                return doctor
+                return doctor.find({})
             }
         }
     }
